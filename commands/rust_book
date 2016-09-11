@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+DIR='/media/dua/github/rust/doc/book'
+PORT=1200
+
+pushd $DIR;
+
+python3.5 -m http.server $PORT
+
+popd
