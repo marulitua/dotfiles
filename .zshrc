@@ -89,6 +89,8 @@ export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
 export PATH="$PATH:/media/dua/commands" # Add RUST and RUSTUP
 export PATH="$PATH:/opt/android-ndk-r10e" # Add RUST and RUSTUP
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
+export CUDA_HOME=/opt/cuda/
 
 transfer() {
     # write to output to tmpfile because of progress bar
