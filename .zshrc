@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/maruli/.oh-my-zsh
+export ZSH=/home/maruli/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -49,7 +49,7 @@ ZSH_THEME="arrow"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie git aws history git-flow github tmux sublime ruby docker archlinux adb gem  rake laravel3 react-native vi-mode mix)
+plugins=(httpie ssh git aws history git-flow github tmux sublime ruby docker docker-compose archlinux adb gem  rake laravel3 react-native vi-mode mix)
 
 # User configuration
 
@@ -86,12 +86,17 @@ eval "$(thefuck --alias fuck)"
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
-export PATH="$PATH:/media/dua/commands" # Add RUST and RUSTUP
+export PATH="$PATH:$HOME/commands" # Add RUST and RUSTUP
 export PATH="$PATH:/opt/android-ndk-r10e" # Add RUST and RUSTUP
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 #export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
 export PYTHONPATH=/usr/lib/python3.5/site-packages
+export GOPATH=~/go
+export PATH="$PATH:$GOPATH/bin"
+export PATH=~/.npm-global/bin:$PATH
+export PATH=$PATH:./node_modules/.bin
 
 transfer() {
     # write to output to tmpfile because of progress bar
@@ -124,4 +129,22 @@ alias stash_all=stash_git_repo
 stream_hide() {
   echo $1
   youtube-dl -q -o- $1  | mplayer -novideo -cache 8192 -
+}
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/maruli/.zshrc'
+
+autoload -Uz compinit
+fpath+=~/.zfunc
+compinit
+# End of lines added by compinstall
+export NVM_DIR="/home/maruli/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+random-string() {
+    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
 }

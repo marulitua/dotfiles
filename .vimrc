@@ -17,9 +17,9 @@ set list
 
 set expandtab
 set smarttab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set autoindent
 
 "nnoremap ; : "swap ; :
@@ -106,3 +106,45 @@ if executable('matcher')
 end
 
 "color contrastneed
+
+" php.vim
+"let g:php_syntax_extensions_enabled
+"g:php_syntax_extensions_enabled, g:php_syntax_extensions_disabled
+"b:php_syntax_extensions_enabled, b:php_syntax_extensions_disabled
+"let b:php_syntax_extensions_enabled
+
+function! PhpSyntaxOverride()
+  hi! def link phpDocTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
+
+"let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
+"nnoremap <buffer> <C-p> :call pdv#DocumentWithSnip()<CR>
+
+let g:airline_theme='base16'
+
+nmap <F8> :TagbarToggle<CR>
+
+" syntastic config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" syntastic config for eslint and eslint_d
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
+
+" Autofix entire buffer with eslint_d:
+nnoremap <leader>f mF:%!eslint_d --stdin --fix-to-stdout<CR>'F
+" Autofix visual selection with eslint_d:
+vnoremap <leader>f :!eslint_d --stdin --fix-to-stdout<CR>gv
