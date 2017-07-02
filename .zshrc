@@ -49,7 +49,7 @@ ZSH_THEME="arrow"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie ssh git aws history git-flow github tmux sublime ruby docker docker-compose archlinux adb gem  rake laravel3 react-native vi-mode mix)
+plugins=(httpie ssh git aws history git-flow github tmux sublime ruby docker docker-compose archlinux adb gem  rake laravel3 react-native vi-mode mix zsh-syntax-highlighting)
 
 # User configuration
 
@@ -148,3 +148,6 @@ export NVM_DIR="/home/maruli/.nvm"
 random-string() {
     cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
 }
+
+autoload -U promptinit; promptinit
+prompt pure
