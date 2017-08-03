@@ -5,7 +5,7 @@ export ZSH=/home/maruli/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="arrow"
+ZSH_THEME=""
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -142,8 +142,6 @@ autoload -Uz compinit
 fpath+=~/.zfunc
 compinit
 # End of lines added by compinstall
-export NVM_DIR="/home/maruli/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 random-string() {
     cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
@@ -151,3 +149,8 @@ random-string() {
 
 autoload -U promptinit; promptinit
 prompt pure
+
+load_node() {
+ export NVM_DIR="/home/maruli/.nvm"
+ [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+}
