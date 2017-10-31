@@ -154,3 +154,5 @@ load_node() {
  export NVM_DIR="/home/maruli/.nvm"
  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 }
+
+alias 'sdf'='ssh -t df bash'
