@@ -156,3 +156,21 @@ load_node() {
 }
 
 alias 'sdf'='ssh -t df bash'
+
+exec_vm() {
+  qemu-system-x86_64 -full-screen -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
+  #qemu-system-x86_64 -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
+}
+
+clean_git_repos() {
+SCRIPT="
+ cd {};
+ if [ -n \"\$(git status --porcelain)\" ]; then
+   echo \"at \$(pwd)\"
+   #echo cleaning...
+   git reset --hard HEAD
+   git clean -f -d
+ fi"
+
+ ls /media/uno/repos/* -l --directory | awk '{print $9}' | xargs -P10 -I{} bash -c $SCRIPT
+}
