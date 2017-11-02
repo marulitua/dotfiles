@@ -5,7 +5,6 @@ Plug 'martinda/Jenkinsfile-vim-syntax'
 Plug 'c9s/phpunit.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
-Plug 'kien/ctrlp.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'StanAngeloff/php.vim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -17,11 +16,12 @@ Plug 'vim-airline/vim-airline'
 Plug 'majutsushi/tagbar'
 " PHP support NVIM
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-Plug 'junegunn/fzf'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run-script parse-stubs'}
 Plug 'rust-lang/rust.vim'
+Plug 'cloudhead/neovim-fuzzy'
+Plug 'sebastianmarkow/deoplete-rust'
 call plug#end()
 
 "" Maps additional php extensions
@@ -97,6 +97,7 @@ let g:LanguageClient_diagnosticsDisplay = {}
 " Required for operations modifying multiple buffers like rename.
 set hidden
 let g:LanguageClient_serverCommands = {
+    \ 'php': ['/usr/bin/php', '/home/maruli/.composer/vendor/bin/php-language-server.php'],
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ }
 let g:deoplete#enable_at_startup = 1
@@ -146,3 +147,12 @@ set list
 
 autocmd FileType php LanguageClientStart
 let g:LanguageServer_autoStart = 1
+
+nnoremap <C-p> :FuzzyOpen<CR>
+let g:fuzzy_opencmd = 'tabnew'
+
+" set auto completion rust
+let g:deoplete#sources#rust#racer_binary='/home/maruli/.cargo/bin/racer'
+let g:deoplete#sources#rust#rust_source_path='/home/maruli/rust/src'
+
+let g:deoplete#sources#rust#show_duplicates=1
