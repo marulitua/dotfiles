@@ -22,6 +22,7 @@ Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run
 Plug 'rust-lang/rust.vim'
 Plug 'cloudhead/neovim-fuzzy'
 Plug 'sebastianmarkow/deoplete-rust'
+Plug 'dracula/vim'
 call plug#end()
 
 "" Maps additional php extensions
@@ -156,3 +157,5 @@ let g:deoplete#sources#rust#racer_binary='/home/maruli/.cargo/bin/racer'
 let g:deoplete#sources#rust#rust_source_path='/home/maruli/rust/src'
 
 let g:deoplete#sources#rust#show_duplicates=1
+
+color dracula
