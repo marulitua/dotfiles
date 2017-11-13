@@ -1,3 +1,12 @@
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release
+    else
+      !cargo build --release --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -19,10 +28,16 @@ Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/echodoc.vim'
 Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run-script parse-stubs'}
+
 Plug 'rust-lang/rust.vim'
-Plug 'cloudhead/neovim-fuzzy'
 Plug 'sebastianmarkow/deoplete-rust'
 Plug 'dracula/vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf/', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'dockyard/vim-easydir'
+Plug 'sheerun/vim-polyglot'
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+Plug 'jremmen/vim-ripgrep'
 call plug#end()
 
 "" Maps additional php extensions
@@ -149,8 +164,24 @@ set list
 autocmd FileType php LanguageClientStart
 let g:LanguageServer_autoStart = 1
 
-nnoremap <C-p> :FuzzyOpen<CR>
-let g:fuzzy_opencmd = 'tabnew'
+" Fuzzy file finder
+let g:fzf_action = {
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
+nnoremap <c-p> :FZF<cr>
+
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10split enew' }
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
 
 " set auto completion rust
 let g:deoplete#sources#rust#racer_binary='/home/maruli/.cargo/bin/racer'
@@ -159,3 +190,24 @@ let g:deoplete#sources#rust#rust_source_path='/home/maruli/rust/src'
 let g:deoplete#sources#rust#show_duplicates=1
 
 color dracula
+
+" Highlight match word
+nnoremap <silent> n   n:call HLNext(0.4)<cr>
+nnoremap <silent> N   N:call HLNext(0.4)<cr>
+
+highlight WhiteOnRed ctermbg=red guibg=darkred
+
+" OR ELSE just highlight the match in red..."
+function! HLNext (blinktime)
+  let [bufnum, lnum, col, off] = getpos('.')
+  let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+  let target_pat = '\c\%#\%('.@/.'\)'
+  let ring = matchadd('WhiteOnRed', target_pat, 101)
+  redraw
+  exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+  call matchdelete(ring)
+  redraw
+endfunction
+
+" Markdown automatic HTML preview
+" let g:markdown_composer_syntax_theme='hybrid'
