@@ -1,0 +1,59 @@
+session_name: bonofactum
+start_directory: ~/PHP/
+windows:
+  - window_name: update systems
+    layout: even-vertical
+    panes:
+      - sudo apt-get update -y
+      - rustup update
+  - window_name: dev servers
+    layout: even-vertical # tiled
+    # options:
+       # main-page-height: 25
+    before_script: "&& ~/start_services.sh"
+    shell_command_before:
+      - phpbrew use php-5.6.29            # run as a first command in all panes
+    panes:
+      - shell_command:                    # pane no. 1
+        - cd ~/PHP/manobo-2008/           # run multiple commands in this panes
+        - xdg-open http://erwin.manobo.de:5000
+        - sleep 5 && php -S erwin.manobo.de:5000
+      - shell_command:
+        - cd ~/PHP/manobo-2.0/
+        - phpbrew off                     # use native PHP
+        - php artisan serve
+      - shell_command:
+        - cd ~/PHP/manobo-service-user/
+        - php -S localhost:7000 -t public
+      - shell_command:
+        - cd ~/PHP/manobo-2.0/
+        - load_node                       # load node's env
+        - npm run watch
+  - window_name: logs
+    layout: even-vertical
+    panes:
+      - tail -f ~/PHP/manobo-2008/logs/manobo.log
+      - tail -f ~/PHP/manobo-2.0/storage/logs/laravel.log
+      - tail -f ~/PHP/manobo-service-user/storage/logs/lumen.log
+  - window_name: manobo legacy source
+    # options:                           # enable auto rename window
+      # automatic-rename: true
+    panes:
+      - shell_command:
+        - cd ~/PHP/manobo-2008/
+        - git stash && git pull origin master && git stash pop
+        - git status
+  - window_name: manobo 2.0 source
+    focus: true
+    panes:
+      - shell_command:
+        - cd ~/PHP/manobo-2.0/
+        - git stash && git pull origin master && git stash pop
+        - git status
+        focus: true
+  - window_name: manobo user service source
+    panes:
+      - shell_command:
+        - cd ~/PHP/manobo-service-user/
+        - git stash && git pull origin master && git stash pop
+        - git status
