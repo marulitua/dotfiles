@@ -1,0 +1,63 @@
+session_name: bonofactum
+windows:
+- layout: 564f,213x58,0,0[213x28,0,0,1,213x29,0,29,2]
+  options:
+    automatic-rename: 'off'
+  panes:
+  - pacupg
+  - focus: 'true'
+    shell_command: rustup update
+  window_name: update systems
+- layout: ddb0,213x58,0,0[213x13,0,0,3,213x13,0,14,4,213x13,0,28,5,213x16,0,42,6]
+  options:
+    automatic-rename: 'off'
+  before_script: "&& ~/start_services.sh"
+  shell_command_before:
+    - phpbrew use php-5.6.29            # run as a first command in all panes
+  panes:
+  - shell_command:
+    - cd /media/uno/PHP/manobo-2008/           # run multiple commands in this panes
+    - xdg-open http://erwin.manobo.de:5000
+    - sleep 5 && php -S erwin.manobo.de:5000
+  - shell_command:
+    - cd /media/uno/PHP/manobo-2.0/
+    - phpbrew off                     # use native PHP
+    - php artisan serve
+  - shell_command:
+    - cd /media/uno/PHP/manobo-service-user/
+    - php -S localhost:7000 -t public
+  - focus: 'true'
+    shell_command:
+    - cd /media/uno/PHP/manobo-2.0/
+    - load_node                       # load node's env
+    - npm run watch
+  window_name: dev servers
+- layout: 675f,213x58,0,0,10
+  options:
+    automatic-rename: 'off'
+  panes:
+  - focus: 'true'
+    shell_command:
+    - git stash && git pull origin master && git stash pop
+  start_directory: /media/uno/PHP/manobo-2008
+  window_name: manobo legacy source
+- focus: 'true'
+  layout: 1657,213x58,0,0{136x58,0,0,11,76x58,137,0,12}
+  options:
+    automatic-rename: 'off'
+  panes:
+  - focus: 'true'
+    shell_command:
+    - git stash && git pull origin master && git stash pop
+  - tail -f storage/logs/laravel.log
+  start_directory: /media/uno/PHP/manobo-2.0
+  window_name: manobo 2.0 source
+- layout: 6762,213x58,0,0,13
+  options:
+    automatic-rename: 'off'
+  panes:
+  - focus: 'true'
+    shell_command:
+    - git stash && git pull origin master && git stash pop
+  start_directory: /media/uno/PHP/manobo-service-user
+  window_name: manobo user service source
