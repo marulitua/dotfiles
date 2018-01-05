@@ -2,12 +2,12 @@ session_name: bonofactum
 start_directory: ~/PHP/
 windows:
   - window_name: update systems
-    layout: even-vertical
+    layout: 564f,213x58,0,0[213x28,0,0,1,213x29,0,29,2]
     panes:
       - sudo apt-get update -y
       - rustup update
   - window_name: dev servers
-    layout: even-vertical # tiled
+    layout: ddb0,213x58,0,0[213x13,0,0,3,213x13,0,14,4,213x13,0,28,5,213x16,0,42,6]
     # options:
        # main-page-height: 25
     before_script: "&& ~/start_services.sh"
@@ -29,31 +29,35 @@ windows:
         - cd ~/PHP/manobo-2.0/
         - load_node                       # load node's env
         - npm run watch
-  - window_name: logs
-    layout: even-vertical
-    panes:
-      - tail -f ~/PHP/manobo-2008/logs/manobo.log
-      - tail -f ~/PHP/manobo-2.0/storage/logs/laravel.log
-      - tail -f ~/PHP/manobo-service-user/storage/logs/lumen.log
   - window_name: manobo legacy source
-    # options:                           # enable auto rename window
-      # automatic-rename: true
+    layout: 675f,213x58,0,0,10
     panes:
       - shell_command:
         - cd ~/PHP/manobo-2008/
         - git stash && git pull origin master && git stash pop
         - git status
+      - shell_command:
+        - cd ~/PHP/manobo-2008/
+        - tail -f ~/PHP/manobo-2008/logs/manobo.log
   - window_name: manobo 2.0 source
     focus: true
+    layout: 1657,213x58,0,0{136x58,0,0,11,76x58,137,0,12}
     panes:
       - shell_command:
         - cd ~/PHP/manobo-2.0/
         - git stash && git pull origin master && git stash pop
         - git status
         focus: true
+      - shell_command:
+        - cd ~/PHP/manobo-2.0/
+        - tail -f ~/PHP/manobo-2.0/storage/logs/laravel.log
   - window_name: manobo user service source
+    layout: 6762,213x58,0,0,13
     panes:
       - shell_command:
         - cd ~/PHP/manobo-service-user/
         - git stash && git pull origin master && git stash pop
         - git status
+      - shell_command:
+        - cd ~/PHP/manobo-service-user/
+        - tail -f ~/PHP/manobo-service-user/storage/logs/lumen.log
