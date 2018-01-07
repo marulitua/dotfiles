@@ -4,7 +4,9 @@ windows:
   options:
     automatic-rename: 'off'
   panes:
-  - pacupg
+  - shell_command:
+    - firefox-developer-edition
+    - pacupg
   - focus: 'true'
     shell_command: rustup update
   window_name: update systems
