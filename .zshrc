@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/home/maruli/.oh-my-zsh
+  export ZSH=/home/maruli/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -49,7 +49,7 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie ssh git aws history git-flow github tmux sublime ruby docker docker-compose archlinux adb gem  rake laravel3 react-native vi-mode mix zsh-syntax-highlighting)
+plugins=(httpie git aws history tmux ruby docker archlinux adb gem  rake laravel3 react-native vi-mode mix nvm zsh-syntax-highlighting rust)
 
 # User configuration
 
@@ -63,9 +63,9 @@ source $ZSH/oh-my-zsh.sh
 
  #Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
+   export EDITOR='nvim'
  else
-   export EDITOR='mvim'
+   export EDITOR='nvim'
  fi
 
  #Compilation flags
@@ -82,86 +82,87 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias sp=" curl -F 'sprunge=<-' http://sprunge.us"
+alias ix=" curl -F 'f:1=<-' ix.io"
 eval "$(thefuck --alias fuck)"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
-export PATH="$PATH:$HOME/commands" # Add RUST and RUSTUP
-export PATH="$PATH:/opt/android-ndk-r10e" # Add RUST and RUSTUP
-export PATH="$PATH:$HOME/.config/composer/vendor/bin"
-#export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export PATH="$PATH:/media/uno/commands"
+export PATH="$PATH:/opt/android-sdk/ndk-bundle"
+export PATH="$PATH:$HOME/.config/composer/vendor/bin" # Add composer
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
-export PYTHONPATH=/usr/lib/python3.5/site-packages
-export GOPATH=~/go
-export PATH="$PATH:$GOPATH/bin"
-export PATH=~/.npm-global/bin:$PATH
-export PATH=$PATH:./node_modules/.bin
-
-transfer() {
-    # write to output to tmpfile because of progress bar
-    tmpfile=$( mktemp -t transferXXX )
-    curl --progress-bar --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
-    cat $tmpfile;
-    rm -f $tmpfile;
-}
-alias transfer=transfer
-
-alias sp=" curl -F 'sprunge=<-' http://sprunge.us"
+#export PYTHONPATH=/usr/lib/python3.5/site-packages
+export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming/emcc"
+export PATH="$PATH:$HOME/emsdk-portable"
+export PATH="$PATH:$HOME/emsdk-portable/clang/fastcomp/build_incoming_64/bin"
+export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
-#. /usr/share/zsh/site-contrib/powerline.zsh
-# powerline-daemon -d
-#. /usr/lib/python3.5/site-packages/powerline/bindings/zsh/powerline.zsh
-#PROMPT="$PROMPT"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 
-update_git_repo() {
-  # Do in parallel
-  ls | xargs -P10 -I{} git -C {} pull
-}
-alias all=update_git_repo
-
-stash_git_repo() {
-  ls | xargs -P10 -I{} git stash
-}
-alias stash_all=stash_git_repo
-
-stream_hide() {
-  echo $1
-  youtube-dl -q -o- $1  | mplayer -novideo -cache 8192 -
-}
+export _JAVA_OPTIONS='-Dsun.java2d.opengl=true'
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
+# bindkey -e
 # End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/maruli/.zshrc'
 
-autoload -Uz compinit
-fpath+=~/.zfunc
-compinit
-# End of lines added by compinstall
+export GVM_ROOT=/home/maruli/.gvm
+. $GVM_ROOT/scripts/gvm-default
 
-random-string() {
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
-}
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
 
 autoload -U promptinit; promptinit
 prompt pure
 
-load_node() {
- export NVM_DIR="/home/maruli/.nvm"
- [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+# set variable based on OS
+OS=`cat /etc/os-release | grep -w NAME | sed -e 's/NAME=//g;s/"//g'`
+if [ "$OS" = 'Arch Linux' ]; then
+  export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
+  export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
+elif [ $OS = 'Ubuntu' ]; then
+  export RUST_SOURCE_PATH='/home/maruli/rust/src'
+  export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
+else
+  export RUST_SOURCE_PATH='not_found'
+  export RACER_BIN_PATH='not_found'
+fi
+
+####### CUSTOM FUNCTIONS
+# search the latest nightly rust that containts RLS
+rust_update() {
+  for i in `seq 0 99`; do
+    echo " === === === "
+    RUST_DATE=`date -u -d "-$i days" "+%Y-%m-%d"`
+    echo "Checking $RUST_DATE..."
+    TOML=`curl -sf https://static.rust-lang.org/dist/$RUST_DATE/channel-rust-nightly.toml`
+    if [[ $? -gt 0 ]]; then
+      echo "Rust $RUST_DATE does not exist"
+    else
+      if [[ -n `echo $TOML | grep rls` && -n `echo $TOML | grep fmt` ]]; then
+        echo "Rust $RUST_DATE has both rls and rustfmt"
+        echo "Run \"rustup default nightly-$RUST_DATE\" to install it"
+        break
+      fi
+    fi
+  done
 }
 
-alias 'sdf'='ssh -t df bash'
-
-exec_vm() {
-  qemu-system-x86_64 -full-screen -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
-  #qemu-system-x86_64 -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
-}
-
+# remove all changes on local repos
 clean_git_repos() {
 SCRIPT="
  cd {};
@@ -174,3 +175,52 @@ SCRIPT="
 
  ls /media/uno/repos/* -l --directory | awk '{print $9}' | xargs -P10 -I{} bash -c $SCRIPT
 }
+
+# run image on qemu emulator
+exec_vm() {
+  qemu-system-x86_64 -full-screen -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
+  #qemu-system-x86_64 -enable-kvm -boot d -cdrom $1 -m 1024 -vga qxl
+}
+
+# generate psudo random string
+random_string() {
+    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
+}
+
+# share files using transfer.sh
+transfer() {
+    # write to output to tmpfile because of progress bar
+    tmpfile=$( mktemp -t transferXXX )
+    curl --progress-bar --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
+    cat $tmpfile;
+    rm -f $tmpfile;
+}
+
+# update all git repos
+update_git_repo() {
+  # Do in parallel
+  cd /media/uno/repos
+  ls | xargs -P10 -I{} git -C {} pull
+}
+
+# play media file in terminal
+stream_hide() {
+  # echo $1
+  youtube-dl -q -o- $1  | mplayer -novideo -cache 8192 -
+}
+
+# set backlight
+terang() {
+  sudo tee /sys/class/backlight/intel_backlight/brightness <<< $1
+}
+
+# load node on demand
+load_nvm() {
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+ export PATH="$PATH:`yarn global bin`"
+}
+
+####### END

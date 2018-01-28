@@ -31,7 +31,10 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/echodoc.vim'
+
+" javascript
+Plug 'mhartington/nvim-typescript'
+Plug 'pangloss/vim-javascript'
 
 " rust language
 Plug 'rust-lang/rust.vim'
@@ -139,13 +142,26 @@ set backupcopy=yes
 " Start deoplete completion engine
 let g:deoplete#enable_at_startup = 1
 
+" set rust source code path
+"let g:deoplete#sources#rust#rust_source_path='/media/uno/repos/rust/src'
+let g:deoplete#sources#rust#rust_source_path=$RUST_SOURCE_PATH
+
+"let g:deoplete#sources#rust#racer_binary='/home/maruli/.cargo/bin/racer'
+let g:deoplete#sources#rust#racer_binary=$RACER_BIN_PATH
+
+" show duplicate matches
+let g:deoplete#sources#rust#show_duplicates=1
+
+"" close preview window on leaving the insert mode
+autocmd InsertLeave * if pumvisible() == 0 | pclose | AirlineRefresh | endif
+
 " Set language server
 set hidden
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'php': ['php', '~/.composer/vendor/felixfbecker/language-server/bin/php-language-server.php']
+    \ 'php': ['php', '/home/maruli/.config/composer/vendor/bin/php-language-server.php'],
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
