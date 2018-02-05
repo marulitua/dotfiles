@@ -56,6 +56,8 @@ plugins=(httpie git aws history tmux ruby docker archlinux adb gem  rake laravel
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
+fpath+=~/.zfunc
+
 source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
@@ -93,11 +95,13 @@ export PATH="$PATH:$HOME/.config/composer/vendor/bin" # Add composer
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
+export DOMAIN=erwin.manobo.de
 #export PYTHONPATH=/usr/lib/python3.5/site-packages
 export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming/emcc"
 export PATH="$PATH:$HOME/emsdk-portable"
 export PATH="$PATH:$HOME/emsdk-portable/clang/fastcomp/build_incoming_64/bin"
 export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming"
+export PATH="$PATH:$HOME/.local/bin"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
 
@@ -133,12 +137,15 @@ OS=`cat /etc/os-release | grep -w NAME | sed -e 's/NAME=//g;s/"//g'`
 if [ "$OS" = 'Arch Linux' ]; then
   export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
+  export PHP_LS_PATH='/home/maruli/.config/composer/vendor/bin/php-language-server.php'
 elif [ $OS = 'Linux Mint' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
+  export PHP_LS_PATH='/home/maruli/.composer/vendor/bin/php-language-server.php'
 else
   export RUST_SOURCE_PATH='not_found'
   export RACER_BIN_PATH='not_found'
+  export PHP_LS_PATH='not_found'
 fi
 
 ####### CUSTOM FUNCTIONS
