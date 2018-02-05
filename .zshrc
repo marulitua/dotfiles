@@ -120,7 +120,6 @@ prompt pure
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...
 # --hidden: Search hidden files and folders
@@ -134,7 +133,7 @@ OS=`cat /etc/os-release | grep -w NAME | sed -e 's/NAME=//g;s/"//g'`
 if [ "$OS" = 'Arch Linux' ]; then
   export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
-elif [ $OS = 'Ubuntu' ]; then
+elif [ $OS = 'Linux Mint' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
 else
