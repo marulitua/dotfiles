@@ -50,6 +50,10 @@ set relativenumber
 "" Automatic indentation.
 "filetype indent on
 
+let g:indentLine_setColors = 0
+let g:indentLine_color_term = 8
+let g:indentLine_char = '┊'
+
 "" Visual settings
 if has('nvim')
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
