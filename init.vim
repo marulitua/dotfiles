@@ -161,7 +161,7 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'php': ['php', '/home/maruli/.config/composer/vendor/bin/php-language-server.php'],
+    \ 'php': ['/usr/bin/php', $PHP_LS_PATH],
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
