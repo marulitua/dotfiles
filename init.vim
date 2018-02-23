@@ -166,6 +166,7 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'php': ['/usr/bin/php', $PHP_LS_PATH],
+    \ 'vue': ['vls'],
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
