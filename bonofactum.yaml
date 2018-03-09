@@ -45,7 +45,7 @@ windows:
   panes:
   - focus: 'true'
     shell_command:
-    - git stash && git pull origin master && git stash pop
+    - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
   start_directory: /home/maruli/PHP/manobo-2008/
   window_name: 'manobo.legacy'
 - layout: ce66,213x58,0,0,9
@@ -54,7 +54,7 @@ windows:
   panes:
   - focus: 'true'
     shell_command:
-    - git stash && git pull origin master && git stash pop
+    - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
   start_directory: /home/maruli/PHP/manobo-2.0/
   window_name: 'manobo.2'
 - layout: 675f,213x58,0,0,10
@@ -63,6 +63,6 @@ windows:
   panes:
   - focus: 'true'
     shell_command:
-    - git stash && git pull origin master && git stash pop
+    - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
   start_directory: /home/maruli/PHP/manobo-service-user
   window_name: 'manobo.service.user'
