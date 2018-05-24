@@ -24,7 +24,11 @@ Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'majutsushi/tagbar'
+<<<<<<< HEAD
 Plug 'lervag/vimtex'
+=======
+Plug 'w0rp/ale'
+>>>>>>> d3d89317097bf1499ef5f9c02c085f9b1dd33c72
 
 " Code completion
 Plug 'autozimu/LanguageClient-neovim', {

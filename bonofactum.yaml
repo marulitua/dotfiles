@@ -17,7 +17,7 @@ windows:
     automatic-rename: 'off'
   before_script: "&& ~/start_services.sh"
   shell_command_before:
-    - phpbrew use php-5.6.30            #  use PHP 5.6
+    - phpbrew use php-5.6.35            #  use PHP 5.6
   panes:
   - shell_command:
     - cd ~/PHP/manobo-2008/
