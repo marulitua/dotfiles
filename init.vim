@@ -24,6 +24,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'majutsushi/tagbar'
+Plug 'lervag/vimtex'
 
 " Code completion
 Plug 'autozimu/LanguageClient-neovim', {
@@ -93,7 +94,7 @@ function! HLNext (blinktime)
 endfunction
 
 "" Nerd tree
-let g:nerdtree_tabs_open_on_console_startup=0
+"let g:nerdtree_tabs_open_on_console_startup=0
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 """ Key: CTRL+n         | Toggle tree
