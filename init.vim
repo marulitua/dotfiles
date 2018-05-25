@@ -49,7 +49,7 @@ set number
 set relativenumber
 
 "" Automatic indentation.
-"filetype indent on
+filetype indent on
 
 let g:indentLine_setColors = 0
 let g:indentLine_color_term = 8
@@ -65,6 +65,15 @@ call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
 
 "  UTF-8 FTW
 set encoding=utf-8
+
+set tabstop=4       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having
+                    " a width of 4.
+
+set shiftwidth=4    " Indents will have a width of 4
+
+set softtabstop=4   " Sets the number of columns for a TAB
 
 " enable syntax highlight 
 syntax on
