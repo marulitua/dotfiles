@@ -24,11 +24,11 @@ Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'majutsushi/tagbar'
-<<<<<<< HEAD
 Plug 'lervag/vimtex'
-=======
 Plug 'w0rp/ale'
->>>>>>> d3d89317097bf1499ef5f9c02c085f9b1dd33c72
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'posva/vim-vue'
 
 " Code completion
 Plug 'autozimu/LanguageClient-neovim', {
@@ -51,6 +51,17 @@ call plug#end()
 "" Show line numbers.
 set number
 set relativenumber
+
+set tabstop=4       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having
+                    " a width of 4.
+
+set shiftwidth=4    " Indents will have a width of 4
+
+set softtabstop=4   " Sets the number of columns for a TAB
+
+"set expandtab       " Expand TABs to spaces
 
 "" Automatic indentation.
 "filetype indent on
@@ -160,6 +171,11 @@ let g:deoplete#sources#rust#racer_binary=$RACER_BIN_PATH
 
 " show duplicate matches
 let g:deoplete#sources#rust#show_duplicates=1
+
+" ALE
+let g:airline#extensions#ale#enabled = 1
+"let g:neosnippet#enable_snipmate_compatibility = 1
+"let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
 "" close preview window on leaving the insert mode
 autocmd InsertLeave * if pumvisible() == 0 | pclose | AirlineRefresh | endif
