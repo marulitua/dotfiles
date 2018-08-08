@@ -5,7 +5,7 @@
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME=""
+ZSH_THEME="spaceship"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -49,7 +49,7 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie git aws history tmux ruby docker archlinux adb gem  rake laravel3 react-native vi-mode mix nvm zsh-syntax-highlighting rust)
+plugins=(httpie git history tmux archlinux vi-mode zsh-syntax-highlighting rust)
 
 # User configuration
 
@@ -96,11 +96,6 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswi
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
 export DOMAIN=erwin.manobo.de
-#export PYTHONPATH=/usr/lib/python3.5/site-packages
-export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming/emcc"
-export PATH="$PATH:$HOME/emsdk-portable"
-export PATH="$PATH:$HOME/emsdk-portable/clang/fastcomp/build_incoming_64/bin"
-export PATH="$PATH:$HOME/emsdk-portable/emscripten/incoming"
 export PATH="$PATH:$HOME/.local/bin"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
@@ -113,14 +108,14 @@ SAVEHIST=1000
 # bindkey -e
 # End of lines configured by zsh-newuser-install
 
-export GVM_ROOT=/home/maruli/.gvm
-. $GVM_ROOT/scripts/gvm-default
+#export GVM_ROOT=/home/maruli/.gvm
+#. $GVM_ROOT/scripts/gvm-default
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-autoload -U promptinit; promptinit
-prompt pure
+#autoload -U promptinit; promptinit
+#prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -137,7 +132,7 @@ OS=`cat /etc/os-release | grep -w NAME | sed -e 's/NAME=//g;s/"//g'`
 if [ "$OS" = 'Arch Linux' ]; then
   export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
-  export PHP_LS_PATH='/home/maruli/.config/composer/vendor/bin/php-language-server.php'
+  export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
 elif [ $OS = 'Linux Mint' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
@@ -190,16 +185,16 @@ exec_vm() {
 
 # generate psudo random string
 random_string() {
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
+  cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
 }
 
 # share files using transfer.sh
 transfer() {
-    # write to output to tmpfile because of progress bar
-    tmpfile=$( mktemp -t transferXXX )
-    curl --progress-bar --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
-    cat $tmpfile;
-    rm -f $tmpfile;
+  # write to output to tmpfile because of progress bar
+  tmpfile=$( mktemp -t transferXXX )
+  curl --progress-bar --upload-file $1 https://transfer.sh/$(basename $1) >> $tmpfile;
+  cat $tmpfile;
+  rm -f $tmpfile;
 }
 
 # update all git repos
@@ -230,3 +225,13 @@ export NVM_DIR="$HOME/.nvm"
 }
 
 ####### END
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+#export PATH="$PATH:$HOME/.rvm/bin"
+
+# added by travis gem
+#[ -f /home/maruli/.travis/travis.sh ] && source /home/maruli/.travis/travis.sh
+
+#export PATH="$HOME/.pyenv/bin:$PATH"
+#eval "$(pyenv init -)"
+#eval "$(pyenv virtualenv-init -)"
