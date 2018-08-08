@@ -1,18 +1,19 @@
 session_name: bonofactum
 windows:
 - focus: 'true'
-  layout: 1cfd,213x58,0,0[213x18,0,0,0,213x18,0,19,1,213x20,0,38,2]
+  layout: b855,274x68,0,0[274x17,0,0,1,274x16,0,18,28,274x16,0,35,26,274x16,0,52,27]
   options:
     automatic-rename: 'off'
   panes:
   - shell_command:
-    - nohup firefox-developer > /dev/null 2>&1 &
+    - nohup firefox > /dev/null 2>&1 &
     - mplayer http://streaming.sim-indonesia.com:8000/genfm
   - sudo apt-get update -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove
   - rustup update
+  - nvim +PlugUpdate +PlugUpgrade +PlugInstall +PlugClean +qall
   start_directory: /home/maruli
   window_name: tmuxp
-- layout: 62d7,213x58,0,0[213x18,0,0{106x18,0,0,3,106x18,107,0,7},213x18,0,19{106x18,0,19,4,106x18,107,19,6},213x20,0,38,5]
+- layout: 2414,274x68,0,0[274x22,0,0{138x22,0,0,4,135x22,139,0,5},274x22,0,23{138x22,0,23,6,135x22,139,23,7},274x22,0,46{137x22,0,46,8,136x22,138,46,25}]
   options:
     automatic-rename: 'off'
   before_script: "&& ~/start_services.sh"
@@ -21,7 +22,6 @@ windows:
   panes:
   - shell_command:
     - cd ~/PHP/manobo-2008/
-    - xdg-open http://erwin.manobo.de:5000
     - php -S erwin.manobo.de:5000      # start manobo legacy
   - shell_command:
     - cd ~/PHP/manobo-2.0/
@@ -37,9 +37,12 @@ windows:
     shell_command:
     - cd ~/PHP/manobo-service-user/
     - php -S localhost:7000 -t public
+  - shell_command:
+    - cd ~/PHP/manobo-service-language/
+    - php -S localhost:9091 -t public   # start language server
   start_directory: /home/maruli
   window_name: 'dev.servers'
-- layout: ce65,213x58,0,0,8
+- layout: d266,274x68,0,0,9
   options:
     automatic-rename: 'off'
   panes:
@@ -48,7 +51,7 @@ windows:
     - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
   start_directory: /home/maruli/PHP/manobo-2008/
   window_name: 'manobo.legacy'
-- layout: ce66,213x58,0,0,9
+- layout: 695f,274x68,0,0,10
   options:
     automatic-rename: 'off'
   panes:
@@ -57,12 +60,3 @@ windows:
     - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
   start_directory: /home/maruli/PHP/manobo-2.0/
   window_name: 'manobo.2'
-- layout: 675f,213x58,0,0,10
-  options:
-    automatic-rename: 'off'
-  panes:
-  - focus: 'true'
-    shell_command:
-    - git stash && git pull origin master && git stash pop && nvim $(git status | grep -m1 modified | sed 's/modified://')
-  start_directory: /home/maruli/PHP/manobo-service-user
-  window_name: 'manobo.service.user'
