@@ -49,7 +49,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie git history tmux archlinux vi-mode zsh-syntax-highlighting rust)
+plugins=(httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust)
 
 # User configuration
 
@@ -86,6 +86,13 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias sp=" curl -F 'sprunge=<-' http://sprunge.us"
 alias ix=" curl -F 'f:1=<-' ix.io"
+
+alias hwsensors='watch -tn1 "lscpu | grep MHz; printf '\n\n'; sensors"'
+
+alias hr='printf $(printf "\e[$(shuf -i 91-97 -n 1);1m%%%ds\e[0m\n" $(tput cols)) | tr " " ='
+
+alias writeback='watch -n0.5 grep Writeback: /proc/meminfo'
+
 eval "$(thefuck --alias fuck)"
 
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
@@ -118,6 +125,8 @@ export PATH="$PATH:$HOME/.rvm/bin"
 #prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...
@@ -199,9 +208,18 @@ transfer() {
 
 # update all git repos
 update_git_repo() {
-  # Do in parallel
-  cd /media/uno/repos
-  ls | xargs -P10 -I{} git -C {} pull
+  SCRIPT="
+  OUTPUT=\$(git pull)
+  STATUS=\$?
+
+  if [ \$STATUS -eq 0 ]; then
+    printf \"%s %s\n\" \$(pwd) $'\U0001f606'
+  else
+    printf \"%s %s\n\" \$(pwd) $'\U0001f605'
+  fi
+"
+  #echo $SCRIPT
+  find /media/uno/repos -name .git -type d -execdir sh -c $SCRIPT \;
 }
 
 # play media file in terminal
@@ -222,6 +240,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
  export PATH="$PATH:`yarn global bin`"
+}
+
+toggle_monitor() {
+  intern=eDP-1-1
+  extern=HDMI-1-1
+
+  if xrandr | grep "$extern connected"; then
+    xrandr --output "$intern" --primary --auto --output "$extern" --right-of "$intern" --auto
+  else
+    xrandr --output "$extern" --off --output "$intern" --auto
+  fi
 }
 
 ####### END
