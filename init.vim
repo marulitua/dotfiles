@@ -90,7 +90,7 @@ set shiftwidth=4    " Indents will have a width of 4
 
 set softtabstop=4   " Sets the number of columns for a TAB
 
-" enable syntax highlight 
+" enable syntax highlight
 syntax on
 
 "" Clipboard
@@ -186,6 +186,9 @@ let g:airline#extensions#ale#enabled = 1
 "let g:neosnippet#enable_snipmate_compatibility = 1
 "let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
+" neovim-remote
+let g:vimtex_compiler_progname = 'nvr'
+
 "" close preview window on leaving the insert mode
 autocmd InsertLeave * if pumvisible() == 0 | pclose | AirlineRefresh | endif
 
@@ -202,3 +205,7 @@ let g:LanguageClient_serverCommands = {
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+" Remember folds
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview

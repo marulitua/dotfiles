@@ -93,7 +93,7 @@ alias hr='printf $(printf "\e[$(shuf -i 91-97 -n 1);1m%%%ds\e[0m\n" $(tput cols)
 
 alias writeback='watch -n0.5 grep Writeback: /proc/meminfo'
 
-eval "$(thefuck --alias fuck)"
+#eval "$(thefuck --alias fuck)"
 
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
 export PATH="$PATH:/media/uno/commands"
@@ -121,6 +121,21 @@ SAVEHIST=1000
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# Add NVM to PATH for scripting. Make sure this is the last PATH variable change.
+#if [ -s "$HOME/.nvm/nvm.sh" ] && [ ! "$(type -f __init_nvm)" = function ]; then
+#  export NVM_DIR="$HOME/.nvm"
+#  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+#  declare -a __node_commands=(nvm `find -L $NVM_DIR/versions/*/*/bin -type f -exec basename {} \; | sort -u`)
+#  function __init_nvm() {
+#      for i in "${__node_commands[@]}"; do unalias $i; done
+#      . "$NVM_DIR"/nvm.sh
+#      unset __node_commands
+#      unset -f __init_nvm
+#  }
+#  for i in "${__node_commands[@]}"; do alias $i='__init_nvm && '$i; done
+#fi
+#export PATH="$PATH:~/.yarn/bin"
+
 #autoload -U promptinit; promptinit
 #prompt spaceship
 
@@ -142,10 +157,10 @@ if [ "$OS" = 'Arch Linux' ]; then
   export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
   export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
-elif [ $OS = 'Linux Mint' ]; then
+elif [ $OS = 'Ubuntu' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
-  export PHP_LS_PATH='/home/maruli/.composer/vendor/bin/php-language-server.php'
+  export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
 else
   export RUST_SOURCE_PATH='not_found'
   export RACER_BIN_PATH='not_found'
@@ -234,13 +249,13 @@ terang() {
 }
 
 # load node on demand
-load_nvm() {
+#load_nvm() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
  export PATH="$PATH:`yarn global bin`"
-}
+#}
 
 toggle_monitor() {
   intern=eDP-1-1
@@ -264,3 +279,4 @@ toggle_monitor() {
 #export PATH="$HOME/.pyenv/bin:$PATH"
 #eval "$(pyenv init -)"
 #eval "$(pyenv virtualenv-init -)"
+unalias grv
