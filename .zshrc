@@ -93,6 +93,10 @@ alias hr='printf $(printf "\e[$(shuf -i 91-97 -n 1);1m%%%ds\e[0m\n" $(tput cols)
 
 alias writeback='watch -n0.5 grep Writeback: /proc/meminfo'
 
+unalias grv
+
+[[ -s "$HOME/.xmake/profile" ]] && source "$HOME/.xmake/profile" # load xmake profile
+
 #eval "$(thefuck --alias fuck)"
 
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
@@ -115,33 +119,18 @@ SAVEHIST=1000
 # bindkey -e
 # End of lines configured by zsh-newuser-install
 
-export GVM_ROOT=/home/maruli/.gvm
-. $GVM_ROOT/scripts/gvm-default
+#export GVM_ROOT=/home/maruli/.gvm
+#. $GVM_ROOT/scripts/gvm-default
+
+[[ -s "/home/maruli/.gvm/scripts/gvm" ]] && source "/home/maruli/.gvm/scripts/gvm"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-
-# Add NVM to PATH for scripting. Make sure this is the last PATH variable change.
-#if [ -s "$HOME/.nvm/nvm.sh" ] && [ ! "$(type -f __init_nvm)" = function ]; then
-#  export NVM_DIR="$HOME/.nvm"
-#  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-#  declare -a __node_commands=(nvm `find -L $NVM_DIR/versions/*/*/bin -type f -exec basename {} \; | sort -u`)
-#  function __init_nvm() {
-#      for i in "${__node_commands[@]}"; do unalias $i; done
-#      . "$NVM_DIR"/nvm.sh
-#      unset __node_commands
-#      unset -f __init_nvm
-#  }
-#  for i in "${__node_commands[@]}"; do alias $i='__init_nvm && '$i; done
-#fi
-#export PATH="$PATH:~/.yarn/bin"
 
 #autoload -U promptinit; promptinit
 #prompt spaceship
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-source ~/z/z.sh
 
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...
@@ -157,10 +146,12 @@ if [ "$OS" = 'Arch Linux' ]; then
   export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
   export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
+  [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
 elif [ $OS = 'Ubuntu' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
   export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
+  source ~/z/z.sh
 else
   export RUST_SOURCE_PATH='not_found'
   export RACER_BIN_PATH='not_found'
@@ -268,6 +259,10 @@ toggle_monitor() {
   fi
 }
 
+sync_santoni() {
+  adb-sync --reverse /sdcard/{Alarms,CallRecordings,CamScanner,DCIM,Documents,Download,Learn6502Assembly,MagiskManager,Movies,Music,Notifications,ROM,Pictures,Podcasts,Ringtones,Signal,Subtitles,TWRP,Traveloka,WhatsApp,aat_data,bas,bluetooth,jpcc,substratum,torrent} /media/uno/santoni
+}
+
 ####### END
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
@@ -279,6 +274,3 @@ toggle_monitor() {
 #export PATH="$HOME/.pyenv/bin:$PATH"
 #eval "$(pyenv init -)"
 #eval "$(pyenv virtualenv-init -)"
-unalias grv
-
-[[ -s "/home/maruli/.gvm/scripts/gvm" ]] && source "/home/maruli/.gvm/scripts/gvm"
