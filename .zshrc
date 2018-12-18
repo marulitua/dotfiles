@@ -115,8 +115,8 @@ SAVEHIST=1000
 # bindkey -e
 # End of lines configured by zsh-newuser-install
 
-#export GVM_ROOT=/home/maruli/.gvm
-#. $GVM_ROOT/scripts/gvm-default
+export GVM_ROOT=/home/maruli/.gvm
+. $GVM_ROOT/scripts/gvm-default
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
@@ -141,7 +141,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+source ~/z/z.sh
 
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...
@@ -249,13 +249,13 @@ terang() {
 }
 
 # load node on demand
-#load_nvm() {
+load_nvm() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
  export PATH="$PATH:`yarn global bin`"
-#}
+}
 
 toggle_monitor() {
   intern=eDP-1-1
@@ -280,3 +280,5 @@ toggle_monitor() {
 #eval "$(pyenv init -)"
 #eval "$(pyenv virtualenv-init -)"
 unalias grv
+
+[[ -s "/home/maruli/.gvm/scripts/gvm" ]] && source "/home/maruli/.gvm/scripts/gvm"
