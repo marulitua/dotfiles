@@ -119,6 +119,9 @@ SAVEHIST=1000
 # bindkey -e
 # End of lines configured by zsh-newuser-install
 
+# enable edit command like bash compatible
+bindkey '\C-x\C-e' edit-command-line
+
 #export GVM_ROOT=/home/maruli/.gvm
 #. $GVM_ROOT/scripts/gvm-default
 
