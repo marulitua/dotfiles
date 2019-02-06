@@ -49,7 +49,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust)
+plugins=(httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use)
 
 # User configuration
 
@@ -59,6 +59,9 @@ plugins=(httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-synta
 fpath+=~/.zfunc
 
 source $ZSH/oh-my-zsh.sh
+
+# initialize conda
+source /home/maruli/anaconda3/etc/profile.d/conda.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
