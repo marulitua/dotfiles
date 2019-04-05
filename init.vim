@@ -13,14 +13,14 @@ endfunction
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
 Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree'
 Plug 'dockyard/vim-easydir'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf/', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-sleuth'
+"Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'majutsushi/tagbar'
@@ -38,7 +38,8 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " javascript
-Plug 'mhartington/nvim-typescript'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'pangloss/vim-javascript'
 
 " rust language
@@ -146,7 +147,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 " Markdown automatic HTML preview
-" let g:markdown_composer_syntax_theme='hybrid'
+let g:markdown_composer_syntax_theme='hybrid'
 
 command! -bang -nargs=* Find
   \ call fzf#vim#grep(
@@ -156,7 +157,7 @@ command! -bang -nargs=* Find
   \   <bang>0)
 
 "" Tagbar
-autocmd FileType * nested :call tagbar#autoopen()
+"autocmd FileType * nested :call tagbar#autoopen()
 """ key: $mod+F8        | Action: Toggle tagbar
 nmap <F8> :TagbarToggle<CR>
 let g:tagbar_autofocus = 0
@@ -187,7 +188,12 @@ let g:airline#extensions#ale#enabled = 1
 "let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
 " neovim-remote
-let g:vimtex_compiler_progname = 'nvr'
+"let g:vimtex_compiler_progname = 'nvr'
+"let g:tex_flavor='latex'
+"let g:vimtex_view_method='zathura'
+"let g:vimtex_quickfix_mode=0
+"set conceallevel=1
+"let g:tex_conceal='abdmg'
 
 "" close preview window on leaving the insert mode
 autocmd InsertLeave * if pumvisible() == 0 | pclose | AirlineRefresh | endif
@@ -207,5 +213,5 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
 " Remember folds
-autocmd BufWinLeave *.* mkview
-autocmd BufWinEnter *.* silent loadview
+"autocmd BufWinLeave *.* mkview
+"autocmd BufWinEnter *.* silent loadview
