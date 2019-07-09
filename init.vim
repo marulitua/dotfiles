@@ -9,6 +9,18 @@ function! BuildComposer(info)
   endif
 endfunction
 
+" vim-plug autoconfig if not already installed
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | nested source $MYVIMRC
+endif
+
+let g:python_host_prog  = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+let g:loaded_python_provider = 1
+let g:vimtex_compiler_progname = 'nvr'
+
 " START PLUG
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -20,15 +32,14 @@ Plug 'dockyard/vim-easydir'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf/', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'sheerun/vim-polyglot'
-"Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'majutsushi/tagbar'
 Plug 'lervag/vimtex'
 Plug 'w0rp/ale'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
 Plug 'posva/vim-vue'
+Plug 'liuchengxu/vista.vim'
 
 " Code completion
 Plug 'autozimu/LanguageClient-neovim', {
@@ -45,6 +56,10 @@ Plug 'pangloss/vim-javascript'
 " rust language
 Plug 'rust-lang/rust.vim'
 Plug 'sebastianmarkow/deoplete-rust'
+
+" Snippets
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 
 " END PLUG
 call plug#end()
@@ -159,9 +174,17 @@ command! -bang -nargs=* Find
 "" Tagbar
 "autocmd FileType * nested :call tagbar#autoopen()
 """ key: $mod+F8        | Action: Toggle tagbar
-nmap <F8> :TagbarToggle<CR>
-let g:tagbar_autofocus = 0
-let g:tagbar_compact = 1
+"nmap <F8> :TagbarToggle<CR>
+"let g:tagbar_autofocus = 0
+"let g:tagbar_compact = 1
+
+"" Vista
+nmap <F8> :Vista!!<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'lcn'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista#renderer#enable_icon = 1
+let g:vista_sidebar_width = 130
 
 " Vue
 let g:vue_disable_pre_processors=1
@@ -206,6 +229,8 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'php': ['/usr/bin/php', $PHP_LS_PATH],
     \ 'vue': ['vls'],
+    \ 'dockerfile': ['docker-langserver', '--stdio'],
+    \ 'sh': ['bash-language-server', 'start'],
     \ }
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
