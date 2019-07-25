@@ -49,7 +49,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use)
+plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use minikube kubectl)
 
 # User configuration
 
@@ -111,6 +111,7 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
 export DOMAIN=erwin.manobo.de
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:/opt/riscv/bin"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
 
@@ -237,13 +238,19 @@ update_git_repo() {
 # play media file in terminal
 stream_hide() {
   # echo $1
-  youtube-dl -q -o- $1  | mplayer -novideo -cache 8192 -
+  youtube-dl -q -o- $1  | mpv --no-video -cache 8192 -
 }
 
 # set backlight
 terang() {
   sudo tee /sys/class/backlight/intel_backlight/brightness <<< $1
 }
+
+if [[ ! -a ~/.zsh-async ]]; then
+  git clone git@github.com:mafredri/zsh-async.git ~/.zsh-async
+fi
+
+. ~/.zsh-async/async.zsh
 
 # load node on demand
 load_nvm() {
@@ -253,6 +260,11 @@ export NVM_DIR="$HOME/.nvm"
 
  export PATH="$PATH:`yarn global bin`"
 }
+
+# Initialize worker
+async_start_worker nvm_worker -n
+async_register_callback nvm_worker load_nvm
+async_job nvm_worker sleep 0.1
 
 toggle_monitor() {
   intern=eDP-1-1
@@ -268,15 +280,3 @@ toggle_monitor() {
 sync_santoni() {
   adb-sync --reverse /sdcard/{Alarms,CallRecordings,CamScanner,DCIM,Documents,Download,Learn6502Assembly,MagiskManager,Movies,Music,Notifications,ROM,Pictures,Podcasts,Ringtones,Signal,Subtitles,TWRP,Traveloka,WhatsApp,aat_data,bas,bluetooth,jpcc,substratum,torrent} /media/uno/santoni
 }
-
-####### END
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-#export PATH="$PATH:$HOME/.rvm/bin"
-
-# added by travis gem
-#[ -f /home/maruli/.travis/travis.sh ] && source /home/maruli/.travis/travis.sh
-
-#export PATH="$HOME/.pyenv/bin:$PATH"
-#eval "$(pyenv init -)"
-#eval "$(pyenv virtualenv-init -)"
