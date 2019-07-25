@@ -50,6 +50,7 @@ ZSH_THEME="spaceship"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use minikube kubectl)
+autoload -U compinit && compinit
 
 # User configuration
 
@@ -103,10 +104,11 @@ unalias grv
 #eval "$(thefuck --alias fuck)"
 
 export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
-export PATH="$PATH:/media/uno/commands"
+export PATH="$PATH:/media/eins/commands"
 export PATH="$PATH:/opt/android-sdk/ndk-bundle"
 export PATH="$PATH:$HOME/.config/composer/vendor/bin" # Add composer
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dsun.java2d.opengl=true'
+export _JAVA_AWT_WM_NONREPARENTING=1
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
 export DOMAIN=erwin.manobo.de
@@ -115,7 +117,6 @@ export PATH="$PATH:/opt/riscv/bin"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
 
-export _JAVA_OPTIONS='-Dsun.java2d.opengl=true'
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -150,7 +151,7 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.g
 # set variable based on OS
 OS=`cat /etc/os-release | grep -w NAME | sed -e 's/NAME=//g;s/"//g'`
 if [ "$OS" = 'Arch Linux' ]; then
-  export RUST_SOURCE_PATH='/media/uno/repos/rust/src'
+  export RUST_SOURCE_PATH='/media/eins/repos/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
   export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
   [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
@@ -196,7 +197,7 @@ SCRIPT="
    git clean -f -d
  fi"
 
- ls /media/uno/repos/* -l --directory | awk '{print $9}' | xargs -P10 -I{} bash -c $SCRIPT
+ find /media/eins/repos -name .git -type d -execdir sh -c $SCRIPT \;
 }
 
 # run image on qemu emulator
@@ -232,13 +233,13 @@ update_git_repo() {
   fi
 "
   #echo $SCRIPT
-  find /media/uno/repos -name .git -type d -execdir sh -c $SCRIPT \;
+  find /media/eins/repos -name .git -type d -execdir sh -c $SCRIPT \;
 }
 
 # play media file in terminal
 stream_hide() {
   # echo $1
-  youtube-dl -q -o- $1  | mpv --no-video -cache 8192 -
+  youtube-dl -q -o- $1  | mpv --no-vid -cache 8192 -
 }
 
 # set backlight
@@ -278,5 +279,5 @@ toggle_monitor() {
 }
 
 sync_santoni() {
-  adb-sync --reverse /sdcard/{Alarms,CallRecordings,CamScanner,DCIM,Documents,Download,Learn6502Assembly,MagiskManager,Movies,Music,Notifications,ROM,Pictures,Podcasts,Ringtones,Signal,Subtitles,TWRP,Traveloka,WhatsApp,aat_data,bas,bluetooth,jpcc,substratum,torrent} /media/uno/santoni
+  adb-sync --reverse /sdcard/{Alarms,CallRecordings,CamScanner,DCIM,Documents,Download,Learn6502Assembly,MagiskManager,Movies,Music,Notifications,ROM,Pictures,Podcasts,Ringtones,Signal,Subtitles,TWRP,Traveloka,WhatsApp,aat_data,bas,bluetooth,jpcc,substratum,torrent} /media/eins/santoni
 }
