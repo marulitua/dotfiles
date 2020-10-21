@@ -16,75 +16,94 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | nested source $MYVIMRC
 endif
 
-let g:python_host_prog  = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
-let g:loaded_python_provider = 1
-let g:vimtex_compiler_progname = 'nvr'
-
 " START PLUG
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'tpope/vim-fugitive'
-Plug 'mhinz/vim-signify'
-Plug 'vim-airline/vim-airline'
-Plug 'scrooloose/nerdtree'
-Plug 'dockyard/vim-easydir'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'liuchengxu/vista.vim'
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-vetur', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-rust-analyzer', {'do': 'yarn install --frozen-lockfile'}
+Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
+Plug 'iamcco/coc-flutter'
+Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fannheyward/coc-sql'
+Plug 'coc-extensions/coc-svelte'
+Plug 'clangd/coc-clangd'
+Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf/', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+Plug 'lervag/vimtex'
 Plug 'sheerun/vim-polyglot'
+Plug 'psliwka/vim-smoothie'
+Plug 'dockyard/vim-easydir'
 Plug 'tpope/vim-sleuth'
 Plug 'Yggdroot/indentLine'
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-Plug 'majutsushi/tagbar'
-Plug 'lervag/vimtex'
+Plug 'metakirby5/codi.vim'
 Plug 'w0rp/ale'
-Plug 'posva/vim-vue'
-Plug 'liuchengxu/vista.vim'
-
-" Code completion
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" javascript
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-Plug 'pangloss/vim-javascript'
-
-" rust language
-Plug 'rust-lang/rust.vim'
-Plug 'sebastianmarkow/deoplete-rust'
-
-" Snippets
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+Plug 'embear/vim-localvimrc'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'morhetz/gruvbox'
 
 " END PLUG
 call plug#end()
 
-"" Show line numbers.
+source $HOME/.config/nvim/coc.vim
+
+" To get correct comment highlighting
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" Show line numbers.
 set number
 set relativenumber
 
-set tabstop=4       " The width of a TAB is set to 4.
-                    " Still it is a \t. It is just that
-                    " Vim will interpret it to be having
-                    " a width of 4.
+" Fuzzy file finder
+let g:fzf_action = {
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
+nnoremap <c-p> :FZF<cr>
 
-set shiftwidth=4    " Indents will have a width of 4
+let g:fzf_layout = { 'window': 'enew' }
+let g:fzf_layout = { 'window': '-tabnew' }
+let g:fzf_layout = { 'window': '10split enew' }
 
-set softtabstop=4   " Sets the number of columns for a TAB
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
 
-"set expandtab       " Expand TABs to spaces
+command! -bang -nargs=* Find call fzf#vim#grep('ag --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
-"" Automatic indentation.
-filetype indent on
+" Markdown automatic HTML preview
+let g:markdown_composer_syntax_theme='hybrid'
 
-let g:indentLine_setColors = 0
-let g:indentLine_color_term = 8
-let g:indentLine_char = '┊'
+command! -bang -nargs=* Find
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(expand('<cword>')), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+"" Nerd tree
+"let g:nerdtree_tabs_open_on_console_startup=0
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+""" Key: CTRL+n         | Toggle tree
+map <C-n> :NERDTreeToggle<CR>
 
 "" Visual settings
 if has('nvim')
@@ -97,17 +116,11 @@ call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
 "  UTF-8 FTW
 set encoding=utf-8
 
-set tabstop=4       " The width of a TAB is set to 4.
-                    " Still it is a \t. It is just that
-                    " Vim will interpret it to be having
-                    " a width of 4.
-
-set shiftwidth=4    " Indents will have a width of 4
-
-set softtabstop=4   " Sets the number of columns for a TAB
-
 " enable syntax highlight
 syntax on
+
+" write to the same file
+set backupcopy=yes
 
 "" Clipboard
 set clipboard=unnamedplus
@@ -133,110 +146,68 @@ function! HLNext (blinktime)
   redraw
 endfunction
 
-"" Nerd tree
-"let g:nerdtree_tabs_open_on_console_startup=0
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-""" Key: CTRL+n         | Toggle tree
-map <C-n> :NERDTreeToggle<CR>
-
-" Fuzzy file finder
-let g:fzf_action = {
-      \ 'ctrl-s': 'split',
-      \ 'ctrl-t': 'tab split',
-      \ 'ctrl-v': 'vsplit'
-      \ }
-nnoremap <c-p> :FZF<cr>
-
-let g:fzf_layout = { 'window': 'enew' }
-let g:fzf_layout = { 'window': '-tabnew' }
-let g:fzf_layout = { 'window': '10split enew' }
-
-command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
-
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
-
-" Markdown automatic HTML preview
-let g:markdown_composer_syntax_theme='hybrid'
-
-command! -bang -nargs=* Find
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(expand('<cword>')), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-"" Tagbar
-"autocmd FileType * nested :call tagbar#autoopen()
-""" key: $mod+F8        | Action: Toggle tagbar
-"nmap <F8> :TagbarToggle<CR>
-"let g:tagbar_autofocus = 0
-"let g:tagbar_compact = 1
-
 "" Vista
 nmap <F8> :Vista!!<CR>
+nmap <F7> :Vista finder<CR>
 let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-let g:vista_default_executive = 'lcn'
-let g:vista_fzf_preview = ['right:50%']
+let g:vista_fzf_preview = ['right:30%']
 let g:vista#renderer#enable_icon = 1
-let g:vista_sidebar_width = 130
+let g:vista_sidebar_width = 30
 
-" Vue
-let g:vue_disable_pre_processors=1
+function NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
 
-" write to the same file
-set backupcopy=yes
+set statusline+=%{NearestMethodOrFunction()}
 
-" Start deoplete completion engine
-let g:deoplete#enable_at_startup = 1
-
-" set rust source code path
-"let g:deoplete#sources#rust#rust_source_path='/media/uno/repos/rust/src'
-let g:deoplete#sources#rust#rust_source_path=$RUST_SOURCE_PATH
-
-"let g:deoplete#sources#rust#racer_binary='/home/maruli/.cargo/bin/racer'
-let g:deoplete#sources#rust#racer_binary=$RACER_BIN_PATH
-
-" show duplicate matches
-let g:deoplete#sources#rust#show_duplicates=1
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 " ALE
 let g:airline#extensions#ale#enabled = 1
 "let g:neosnippet#enable_snipmate_compatibility = 1
 "let g:neosnippet#snippets_directory='~/.config/nvim/plugged/vim-snippets/snippets'
 
-" neovim-remote
-"let g:vimtex_compiler_progname = 'nvr'
-"let g:tex_flavor='latex'
-"let g:vimtex_view_method='zathura'
-"let g:vimtex_quickfix_mode=0
-"set conceallevel=1
-"let g:tex_conceal='abdmg'
+" Vim-localvimrc
+let g:localvimrc_enable = 0
 
-"" close preview window on leaving the insert mode
-autocmd InsertLeave * if pumvisible() == 0 | pclose | AirlineRefresh | endif
+" Disabling lvimrc sandboxing
+let g:localvimrc_sandbox = 0
 
-" Set language server
-set hidden
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'php': ['/usr/bin/php', $PHP_LS_PATH],
-    \ 'vue': ['vls'],
-    \ 'dockerfile': ['docker-langserver', '--stdio'],
-    \ 'sh': ['bash-language-server', 'start'],
-    \ }
+" coc-snippets
+" Use <C-l> for tigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
 
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
 
-" Remember folds
-"autocmd BufWinLeave *.* mkview
-"autocmd BufWinEnter *.* silent loadview
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? coc#_select_confirm():
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>":
+  \ <SID>check_back_space() ? "\<TAB>":
+  \ coc#refresh()
+
+function s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+
+let g:coc_snippet_next='<tab>'
+
+" Remap for do codeAction of selected region
+function! s:cocActionOpenFromSelected(type) abort
+  execute 'CocCommand actions.open'.a:type
+endfunction
+xmap <silent> <leader>a:<C-u>execute 'CocCommand actions.open'.visualmode()<CR>
+nmap <silent> <leader>a:<C-u>set operatorfunc=<SID>cocActionOpenFromSelected<CR>g@
+
+set termguicolors
+colorscheme gruvbox

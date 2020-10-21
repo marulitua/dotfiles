@@ -1,0 +1,15 @@
+{
+  "languageserver": {
+    "go": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "trace.server": "verbose",
+      "filetypes": ["go"]
+    },
+    "php": {
+      "command": "/usr/bin/php",
+      "args": [ "/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php" ],
+      "filetypes": ["php"]
+    }
+  }
+}

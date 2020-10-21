@@ -1,3 +1,4 @@
+#qzmodload zsh/zprof
 # Path to your oh-my-zsh installation.
   export ZSH=/home/maruli/.oh-my-zsh
 
@@ -5,7 +6,7 @@
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="spaceship"
+#ZSH_THEME="spaceship"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -49,8 +50,7 @@ ZSH_THEME="spaceship"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use minikube kubectl)
-autoload -U compinit && compinit
+plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use flutter)
 
 # User configuration
 
@@ -61,8 +61,10 @@ fpath+=~/.zfunc
 
 source $ZSH/oh-my-zsh.sh
 
+eval "$(direnv hook zsh)"
+
 # initialize conda
-source /home/maruli/anaconda3/etc/profile.d/conda.sh
+#source /home/maruli/anaconda3/etc/profile.d/conda.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -97,6 +99,8 @@ alias hr='printf $(printf "\e[$(shuf -i 91-97 -n 1);1m%%%ds\e[0m\n" $(tput cols)
 
 alias writeback='watch -n0.5 grep Writeback: /proc/meminfo'
 
+alias iseenocolor='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"'
+
 unalias grv
 
 [[ -s "$HOME/.xmake/profile" ]] && source "$HOME/.xmake/profile" # load xmake profile
@@ -107,16 +111,21 @@ export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
 export PATH="$PATH:/media/eins/commands"
 export PATH="$PATH:/opt/android-sdk/ndk-bundle"
 export PATH="$PATH:$HOME/.config/composer/vendor/bin" # Add composer
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dsun.java2d.opengl=true'
-export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
-export DOMAIN=erwin.manobo.de
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:/opt/riscv/bin"
+export PATH="$PATH:/media/eins/esp/xtensa-esp32-elf/bin"
+export PATH="$PATH:/opt/esp-idf/tools/idf.py"
+export PATH="$PATH:$HOME/go/bin"
+export ESPIDF=/media/eins/esp32_toolchain/esp-idf
+export IDF_PATH=/media/eins/esp32_toolchain/esp-idf
+export PATH="$HOME/.vector/vector-x86_64-unknown-linux-musl/bin:$PATH"
 
 [[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc # Add phpbrew
 
+export _JAVA_OPTIONS='-Dsun.java2d.opengl=true'
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -137,6 +146,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 #autoload -U promptinit; promptinit
 #prompt spaceship
+eval "$(starship init zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -197,7 +207,7 @@ SCRIPT="
    git clean -f -d
  fi"
 
- find /media/eins/repos -name .git -type d -execdir sh -c $SCRIPT \;
+ ls /media/eins/repos/* -l --directory | awk '{print $9}' | xargs -P10 -I{} bash -c $SCRIPT
 }
 
 # run image on qemu emulator
@@ -229,17 +239,17 @@ update_git_repo() {
   if [ \$STATUS -eq 0 ]; then
     printf \"%s %s\n\" \$(pwd) $'\U0001f606'
   else
-    printf \"%s %s\n\" \$(pwd) $'\U0001f605'
+    printf \"\\\x1b[31m%s\\\x1b[0m %s\n\" \$(pwd) $'\U0001f605'
   fi
 "
-  #echo $SCRIPT
+#  echo $SCRIPT
   find /media/eins/repos -name .git -type d -execdir sh -c $SCRIPT \;
 }
 
 # play media file in terminal
 stream_hide() {
   # echo $1
-  youtube-dl -q -o- $1  | mpv --no-vid -cache 8192 -
+  youtube-dl -q -o- $1  | mpv --no-video -cache 8192 -
 }
 
 # set backlight
@@ -281,3 +291,15 @@ toggle_monitor() {
 sync_santoni() {
   adb-sync --reverse /sdcard/{Alarms,CallRecordings,CamScanner,DCIM,Documents,Download,Learn6502Assembly,MagiskManager,Movies,Music,Notifications,ROM,Pictures,Podcasts,Ringtones,Signal,Subtitles,TWRP,Traveloka,WhatsApp,aat_data,bas,bluetooth,jpcc,substratum,torrent} /media/eins/santoni
 }
+
+lock() {
+  xscreensaver &
+  xscreensaver-command -lock
+}
+
+#zprof
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+
+source /home/maruli/.config/broot/launcher/bash/br
