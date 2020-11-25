@@ -16,6 +16,11 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | nested source $MYVIMRC
 endif
 
+let g:python_host_prog  = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+let g:loaded_python_provider = 1
+let g:vimtex_compiler_progname = 'nvr'
+
 " START PLUG
 call plug#begin('~/.local/share/nvim/plugged')
 
@@ -54,6 +59,7 @@ Plug 'w0rp/ale'
 Plug 'embear/vim-localvimrc'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'morhetz/gruvbox'
+Plug 'editorconfig/editorconfig-vim'
 
 " END PLUG
 call plug#end()

@@ -50,7 +50,10 @@
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use flutter)
+plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use flutter z)
+autoload -U compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
 
 # User configuration
 
@@ -61,7 +64,11 @@ fpath+=~/.zfunc
 
 source $ZSH/oh-my-zsh.sh
 
+eval "$(navi widget zsh)"
+
 eval "$(direnv hook zsh)"
+
+eval "$(starship init zsh)"
 
 # initialize conda
 #source /home/maruli/anaconda3/etc/profile.d/conda.sh
@@ -111,12 +118,13 @@ export PATH="$PATH:$HOME/.cargo/bin" # Add RUST and RUSTUP
 export PATH="$PATH:/media/eins/commands"
 export PATH="$PATH:/opt/android-sdk/ndk-bundle"
 export PATH="$PATH:$HOME/.config/composer/vendor/bin" # Add composer
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dsun.java2d.opengl=true'
+export _JAVA_AWT_WM_NONREPARENTING=1
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 export CUDA_HOME=/opt/cuda/
+export DOMAIN=erwin.manobo.de
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:/opt/riscv/bin"
-export PATH="$PATH:/media/eins/esp/xtensa-esp32-elf/bin"
 export PATH="$PATH:/opt/esp-idf/tools/idf.py"
 export PATH="$PATH:$HOME/go/bin"
 export ESPIDF=/media/eins/esp32_toolchain/esp-idf
@@ -144,10 +152,6 @@ bindkey '\C-x\C-e' edit-command-line
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-#autoload -U promptinit; promptinit
-#prompt spaceship
-eval "$(starship init zsh)"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # --files: List files that would be searched but do not search
@@ -169,7 +173,6 @@ elif [ $OS = 'Ubuntu' ]; then
   export RUST_SOURCE_PATH='/home/maruli/rust/src'
   export RACER_BIN_PATH='/home/maruli/.cargo/bin/racer'
   export PHP_LS_PATH='/home/maruli/php_ls/vendor/felixfbecker/language-server/bin/php-language-server.php'
-  source ~/z/z.sh
 else
   export RUST_SOURCE_PATH='not_found'
   export RACER_BIN_PATH='not_found'
@@ -242,7 +245,6 @@ update_git_repo() {
     printf \"\\\x1b[31m%s\\\x1b[0m %s\n\" \$(pwd) $'\U0001f605'
   fi
 "
-#  echo $SCRIPT
   find /media/eins/repos -name .git -type d -execdir sh -c $SCRIPT \;
 }
 
@@ -296,10 +298,4 @@ lock() {
   xscreensaver &
   xscreensaver-command -lock
 }
-
-#zprof
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
-
 source /home/maruli/.config/broot/launcher/bash/br
