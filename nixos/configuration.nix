@@ -14,6 +14,7 @@
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
+    loader.grub.device = "/dev/sdb";
   };
 
   networking.hostName = "magnetar"; # Define your hostname.
@@ -95,6 +96,8 @@
      shell = pkgs.zsh;
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -115,6 +118,8 @@
      navi
      rustup
      yarn
+     dmenu
+     xscreensaver
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -130,9 +135,22 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome3.enable = true;
+  services.xserver = {
+    enable = true;
+    layout = "us";
+
+    #Xmonad
+    windowManager.xmonad.enable = true;
+    windowManager.xmonad.enableContribAndExtras = true;
+    displayManager.defaultSession = "none+xmonad";
+    desktopManager.xterm.enable = false;
+
+    #Gnome
+    #desktopManager.gnome3.enable = true;
+
+    displayManager.gdm.enable = true;
+    wacom.enable = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
