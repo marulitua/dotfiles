@@ -16,16 +16,18 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | nested source $MYVIMRC
 endif
 
-let g:python_host_prog  = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
-let g:loaded_python_provider = 1
-let g:vimtex_compiler_progname = 'nvr'
+"let g:python_host_prog  = '/usr/bin/python'
+"let g:python3_host_prog = '/usr/bin/python3'
+"let g:loaded_python_provider = 1
+"let g:vimtex_compiler_progname = 'nvr'
+let g:python3_host_prog = '/run/current-system/sw/bin/python'
+let g:loaded_python_provider = 0
+"let g:loaded_node_provider=1
 
 " START PLUG
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'liuchengxu/vista.vim'
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-vetur', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
@@ -60,6 +62,7 @@ Plug 'embear/vim-localvimrc'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'morhetz/gruvbox'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'liuchengxu/vista.vim'
 
 " END PLUG
 call plug#end()
@@ -116,11 +119,11 @@ if has('nvim')
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
-"set colorcolumn=80
-call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
-
 "  UTF-8 FTW
 set encoding=utf-8
+
+" To enable highlight current symbol on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " enable syntax highlight
 syntax on
@@ -159,6 +162,8 @@ let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
 let g:vista_fzf_preview = ['right:30%']
 let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 30
+let g:vista_default_executive = 'coc'
+let g:vista_disable_statusline = 0
 
 function NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
@@ -217,3 +222,9 @@ nmap <silent> <leader>a:<C-u>set operatorfunc=<SID>cocActionOpenFromSelected<CR>
 
 set termguicolors
 colorscheme gruvbox
+"hi Quote ctermbg=109 guifg=#83a598
+"set colorcolumn=81
+call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
+autocmd FileWritePost * call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
+autocmd BufReadPost * call matchadd('ColorColumn', '\%81v', 100) "Give warning when line  > 80
+highlight ColorColumn ctermbg=135 guibg=#850127

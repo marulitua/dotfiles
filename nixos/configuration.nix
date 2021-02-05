@@ -4,10 +4,15 @@
 
 { config, pkgs, ... }:
 
+let php = pkgs.php.buildEnv { extraConfig = "memory_limit = 2G"; };
+
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      #./common.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -15,6 +20,7 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     loader.grub.device = "/dev/sdb";
+    kernelModules = [ "kvm-amd" "kvm-intel" ];
   };
 
   networking.hostName = "magnetar"; # Define your hostname.
@@ -28,7 +34,8 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp2s0.useDHCP = true;
-  networking.interfaces.wlp3s0.useDHCP = true;
+  networking.interfaces.wlp3s0.useDHCP = false;
+  networking.firewall.allowedTCPPorts = [ 8000 ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -41,86 +48,48 @@
      keyMap = "us";
   };
 
-#  fonts.fonts = with pkgs; [
-#    ( nerdfonts.override {
-#      fonts = [
-#        "FiraCode"
-#        "Hack"
-#      ];
-#    })
-#  ];
   fonts.fonts = with pkgs; [
      fira-code
      fira-code-symbols
      hack-font
   ];
 
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-
-  programs.zsh.enable = true;
-
-  programs.zsh.ohMyZsh = {
-     enable = true;
-     plugins = [
-     	"auto-notify"
-	"httpie"
-	"git"
-	"history"
-	"tmux"
-	"archlinux"
-	"vi-mode"
-	"zsh-autosuggestions"
-	"zsh-syntax-highlighting"
-	"rust"
-	"you-should-use"
-	"z"
-     ];
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.maruli = {
      isNormalUser = true;
-     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "docker" "vboxusers" ]; # Enable ‘sudo’ for the user.
      shell = pkgs.zsh;
   };
 
   security.sudo.wheelNeedsPassword = false;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-     smartmontools
-     wget
-     neovim
-     htop
-     tmux
-     fzf
-     firefox
-     kitty
-     exa
-     git
-     bat
-     httpie
-     starship
-     direnv
-     navi
-     rustup
-     yarn
-     dmenu
-     xscreensaver
-  ];
+  programs.zsh.enable = true;
+
+#  programs.zsh.ohMyZsh = {
+#     enable = true;
+#     custom = "~/.oh-my-zsh/custom";
+#     plugins = [
+#     	"auto-notify"
+#	"httpie"
+#	"git"
+#	"history"
+#	"tmux"
+#	"archlinux"
+#	"vi-mode"
+#	"zsh-autosuggestions"
+#	"zsh-syntax-highlighting"
+#	"rust"
+#	"you-should-use"
+#	"z"
+#     ];
+#  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -150,6 +119,19 @@
 
     displayManager.gdm.enable = true;
     wacom.enable = true;
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+  };
+
+  services.gnome3.gnome-keyring.enable = true;
+
+  virtualisation = {
+    docker.enable = true;
+    libvirtd.enable = true;
+    virtualbox.host = { 
+      enable = true;
+      headless = true;
+    };
   };
 
   # Open ports in the firewall.
@@ -164,6 +146,79 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system = {
+    stateVersion = "20.09"; # Did you read the comment?
+    autoUpgrade.enable = true;
+  };
 
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+     file
+     smartmontools
+     wget
+     neovim
+     htop
+     tmux
+     fzf
+     firefox
+     kitty
+     exa
+     git
+     bat
+     httpie
+     starship
+     direnv
+     navi
+     yarn
+     dmenu
+     xscreensaver
+     openssl
+
+     docker-compose
+     docker-credential-helpers
+     ansible
+
+     pulseaudio
+     pavucontrol
+
+     ripgrep
+     ripgrep-all
+
+     rustup
+     gcc
+     mkpasswd
+
+     libnotify
+     dunst
+     php
+     python3
+     python38Packages.pip
+     nodejs
+     ctags
+     texlive.combined.scheme-medium
+
+     unzip
+     terraform-docs
+     terraform-landscape
+
+     broot
+     inetutils
+     act
+
+     vagrant
+     nomad
+
+     python38Packages.paho-mqtt
+     python38Packages.pylint
+
+     asciinema
+     jq
+     watchexec
+     chromium
+  ];
+
+  environment.etc."php.ini".text = ''
+    memory_limit = 2G
+  '';
 }
