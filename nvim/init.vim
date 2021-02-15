@@ -63,6 +63,7 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'morhetz/gruvbox'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 " END PLUG
 call plug#end()
@@ -199,6 +200,11 @@ let g:coc_snippet_next = '<c-k>'
 
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" c++ syntax highlighting
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
 
 inoremap <silent><expr> <TAB>
   \ pumvisible() ? coc#_select_confirm():

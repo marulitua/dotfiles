@@ -4,7 +4,7 @@
 
 { config, pkgs, ... }:
 
-let php = pkgs.php.buildEnv { extraConfig = "memory_limit = 2G"; };
+let php = pkgs.php.buildEnv { extraConfig = "memory_limit = 4G"; };
 
 in
 
@@ -216,9 +216,7 @@ in
      jq
      watchexec
      chromium
-  ];
 
-  environment.etc."php.ini".text = ''
-    memory_limit = 2G
-  '';
+     ccls
+  ];
 }
