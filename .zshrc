@@ -298,4 +298,30 @@ lock() {
   xscreensaver &
   xscreensaver-command -lock
 }
+
+docker_gui() {
+  IMAGE_NAME="docker_gui"
+
+  docker build -t docker_gui - << __EOF__
+FROM $1
+RUN apt-get update
+RUN apt-get install -qqy x11-apps
+ENV DISPLAY :0
+CMD xeyes
+__EOF__
+
+  clean_up() {
+    echo "Clean up $IMAGE_NAME...\n"
+    docker rmi $IMAGE_NAME
+    trap - ERR EXIT
+  }
+
+  trap "clean_up" ERR EXIT
+
+  XSOCK=/tmp/.X11-unix
+  XAUTH=/tmp/.docker.xauth
+  xauth nlist :0 | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+  docker run --rm -ti -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH $IMAGE_NAME $2
+}
+
 source /home/maruli/.config/broot/launcher/bash/br
