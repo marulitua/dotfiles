@@ -7,7 +7,7 @@ import System.IO
 
 main = xmonad $ defaultConfig
 	{ borderWidth					= 1
-	, terminal						= "tilda"
+	, terminal						= "kitty"
 	, normalBorderColor		= "#cccccc"
 	, focusedBorderColor	= "#cd8b00"
 	, manageHook = manageDocks <+> manageHook defaultConfig
