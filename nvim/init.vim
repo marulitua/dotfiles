@@ -17,10 +17,9 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 "let g:python_host_prog  = '/usr/bin/python'
-"let g:python3_host_prog = '/usr/bin/python3'
+let g:python3_host_prog = '/usr/bin/python3'
 "let g:loaded_python_provider = 1
 "let g:vimtex_compiler_progname = 'nvr'
-let g:python3_host_prog = '/run/current-system/sw/bin/python'
 let g:loaded_python_provider = 0
 "let g:loaded_node_provider=1
 
@@ -206,11 +205,18 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+" remap for complete to use tab and <cr>
 inoremap <silent><expr> <TAB>
-  \ pumvisible() ? coc#_select_confirm():
-  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>":
-  \ <SID>check_back_space() ? "\<TAB>":
-  \ coc#refresh()
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
+hi CocSearch ctermfg=12 guifg=#18A3FF
+hi CocMenuSel ctermbg=109 guibg=#13354A
 
 function s:check_back_space() abort
   let col = col('.') - 1
