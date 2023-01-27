@@ -50,7 +50,7 @@
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use flutter z)
+plugins=(auto-notify httpie git history tmux archlinux vi-mode zsh-autosuggestions zsh-syntax-highlighting rust you-should-use flutter z fzf-zsh-plugin)
 autoload -U compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
@@ -69,6 +69,10 @@ eval "$(navi widget zsh)"
 eval "$(direnv hook zsh)"
 
 eval "$(starship init zsh)"
+
+eval "$(zoxide init zsh)"
+
+eval "$(mcfly init zsh)"
 
 # initialize conda
 #source /home/maruli/anaconda3/etc/profile.d/conda.sh
@@ -152,7 +156,7 @@ bindkey '\C-x\C-e' edit-command-line
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...
@@ -324,4 +328,26 @@ __EOF__
   docker run --rm -ti -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH $IMAGE_NAME $2
 }
 
+kompos() {
+  if [[ "$PWD" == "$DOCKER_COMPOSE_PATH" ]]; then
+    FLAG=0
+  else
+    FLAG=1
+  fi
+
+  if [ $FLAG -eq 1 ]; then
+    pushd $DOCKER_COMPOSE_PATH > /dev/null
+  fi
+
+  docker compose $@
+
+  if [ $FLAG -eq 1 ]; then
+    popd > /dev/null
+  fi
+}
+
 source /home/maruli/.config/broot/launcher/bash/br
+
+# mcfly configurations
+export MCFLY_KEY_SCHEME=vim
+export MCFLY_FUZZY=3
