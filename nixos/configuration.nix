@@ -10,17 +10,14 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
   networking.hostName = "magnetar"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  networking.hosts = {
+    "192.168.178.145" = ["imig.duckdns.org"];
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Makassar";
@@ -30,24 +27,32 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
+  # Minimal configuration for NFS support with Vagrant.
+  services.nfs.server.enable = true;
+
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  
+  services.xserver = {
+    enable = true;
+    videoDrivers = [ "modesetting" "nvidia" ];
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+    desktopManager.gnome = {
+      enable = true;
+    };
+    layout = "us";
+  };
 
   # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
+#  services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
@@ -62,23 +67,25 @@
   # };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
+  services.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     tree
-  #   ];
-  # };
   users.users.maruli = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = [ "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" "libvirtd" "audio" ]; # Enable ‘sudo’ for the user.
+#    shell = pkgs.nushell;
+#    shell = pkgs.bash;
   };
 
-  # programs.firefox.enable = true;
+  security.sudo = {
+    wheelNeedsPassword = false;
+  };
+
+  users.extraGroups.vboxusers.members = [ "maruli" ];
+
+  programs.firefox.enable = true;
+
+  # services.gnome.gnome-keyring.enable = true;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
@@ -87,12 +94,45 @@
   #   wget
   # ];
   environment.systemPackages = with pkgs; [
+    zip
     git
-    neovim
     wget
     curl
     htop
-    bat
+    nvtopPackages.full
+    ripgrep
+    zenith-nvidia
+    file
+    vagrant
+    gimp
+    watchexec
+    font-awesome
+    helix
+    xclip
+
+    lua51Packages.luarocks
+    lua51Packages.lua
+    eza
+    fzf
+    lshw
+    jq
+
+    sniffnet
+  ];
+
+  fonts.packages = with pkgs; [
+    font-awesome
+    powerline-fonts
+    powerline-symbols
+    nerd-fonts.fira-code
+    nerd-fonts.fira-mono
+    nerd-fonts.symbols-only
+    nerd-fonts.hack
+    nerd-fonts.lilex
+    nerd-fonts.monoid
+    nerd-fonts.ubuntu-sans
+    nerd-fonts.ubuntu-mono
+    nerd-fonts.droid-sans-mono
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -106,16 +146,46 @@
     enableSSHSupport = true;
   };
 
+  programs.tcpdump.enable = true;
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # virtualization
+  virtualisation = {
+    docker = {
+      enable = true;
+      daemon.settings.features.cdi = true;
+    };
+
+    virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+    };
+
+    libvirtd.enable = true;
+
+    spiceUSBRedirection.enable = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  # Add firewall exception for VirtualBox provider
+  networking.firewall.extraCommands = ''
+    ip46tables -I INPUT 1 -i vboxnet+ -p tcp -m tcp --dport 2049 -j ACCEPT
+  '';
+
+  # Add firewall exception for libvirt provider when using NFSv4
+  networking.firewall.interfaces."virbr1" = {
+    allowedTCPPorts = [ 2049 ];
+    allowedUDPPorts = [ 2049 ];
+  };
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -141,5 +211,23 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.05"; # Did you read the comment?
 
-}
+  programs.adb.enable = true;
 
+  programs.virt-manager.enable = true;
+
+  users.groups.libvirtd.members = ["maruli"];
+
+  programs.dconf.profiles.user.databases = [
+    {
+      settings = {
+        "org/gnome/mutter" = {
+          experimental-features = [
+            "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+            "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+            "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
+          ];
+        };
+      };
+    }
+  ];
+}
