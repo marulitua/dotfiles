@@ -24,8 +24,11 @@ config.keys = {
        },
        action = wezterm.action_callback(function(window, pane)
           local url = window:get_selection_text_for_pane(pane)
-          wezterm.log_info("opening: " .. url)
-          wezterm.open_with(url, 'firefox')
+          local sanitized_url = url:gsub("[¬\"]", "") --
+--          local sanitized_url = url:gsub("¬", "") --
+          wezterm.log_info("url: " .. url)
+          wezterm.log_info("opening: " .. sanitized_url)
+          wezterm.open_with(sanitized_url, 'firefox')
        end)
      }}
    },

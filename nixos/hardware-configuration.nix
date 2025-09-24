@@ -18,7 +18,8 @@
 
   # Use latest kernel.
 #  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_6_15;
+  boot.kernelPackages = pkgs.linuxPackages;
+#  boot.kernelPackages = pkgs.linuxPackages_6_15;
   boot.kernelParams = [ "kvm.enable_virt_at_load=0" ];
 
   fileSystems."/" =
@@ -54,7 +55,8 @@
 #    modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+#    package = config.boot.kernelPackages.nvidiaPackages.production;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     powerManagement = {
       enable = true;
@@ -78,7 +80,13 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+
+    extraPackages = with pkgs; [
+      intel-media-driver
+    ];
   };
+
+  hardware.bluetooth.enable = true;
 
   powerManagement = {
     enable = true;

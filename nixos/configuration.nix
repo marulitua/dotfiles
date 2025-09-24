@@ -41,19 +41,20 @@
   services.xserver = {
     enable = true;
     videoDrivers = [ "modesetting" "nvidia" ];
-    displayManager.gdm = {
-      enable = true;
-      wayland = true;
+    displayManager = {
+      defaultSession = "niri";
+      gdm = {
+        enable = true;
+        wayland = true;
+      };
     };
     desktopManager.gnome = {
       enable = true;
     };
-    layout = "us";
-  };
 
   # Configure keymap in X11
-#  services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+    xkb.layout = "us";
+  };
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -118,9 +119,19 @@
     jq
 
     sniffnet
+
+    libreoffice
+
+    wl-clipboard
   ];
 
+  fonts.fontconfig.useEmbeddedBitmaps = true;
+
   fonts.packages = with pkgs; [
+    google-fonts
+    noto-fonts
+    noto-fonts-emoji
+    noto-fonts-cjk-sans
     font-awesome
     powerline-fonts
     powerline-symbols
@@ -135,7 +146,18 @@
     nerd-fonts.droid-sans-mono
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = ["maruli"];
+    substituters = [
+      "https://cache.nixos.org"
+      "https://nix-community.cachix.org"
+    ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -230,4 +252,11 @@
       };
     }
   ];
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+    NIXOS_OZONE_WL = "1";
+  };
+
+  programs.niri.enable = true;
 }

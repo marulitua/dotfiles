@@ -71,12 +71,14 @@ return {
         vim.diagnostic.config({ virtual_text = false })
     end
   },
-  {
-    "m4xshen/hardtime.nvim",
-    lazy = false,
-    dependencies = { "MunifTanjim/nui.nvim" },
-    opts = {},
-  },
+--  {
+--    "m4xshen/hardtime.nvim",
+--    lazy = false,
+--    dependencies = { "MunifTanjim/nui.nvim" },
+--    opts = {
+--      restriction_mode = "hint",
+--    },
+--  },
   {
     "rcarriga/nvim-notify",
     lazy = false,

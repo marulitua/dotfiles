@@ -169,27 +169,42 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
-require('lspconfig').lua_ls.setup({})
-require("lspconfig").ansiblels.setup{}
-require("lspconfig").ruff.setup{}
-require('lspconfig').basedpyright.setup{}
-require('lspconfig').bashls.setup{}
-require('lspconfig').terraformls.setup{}
-require('lspconfig').gopls.setup{}
-require('lspconfig').nixd.setup{}
-require('lspconfig').rust_analyzer.setup{}
-require('lspconfig').ts_ls.setup{}
-require('lspconfig').phpactor.setup{}
+vim.lsp.enable({"lua_ls"})
+vim.lsp.enable({"ansiblels"})
+vim.lsp.enable({"ruff"})
+vim.lsp.enable({"basedpyright"})
+vim.lsp.enable({"bashls"})
+vim.lsp.enable({"terraformls"})
+vim.lsp.enable({"gopls"})
+vim.lsp.enable({"nixd"})
+vim.lsp.enable({"rust_analyzer"})
+vim.lsp.enable({"ts_ls"})
+vim.lsp.enable({"phpactor"})
 
---require("lspconfig").tinymist.setup {
+--vim.lsp.config("tinymist", {
 --  settings = {
 --    formatterMode = "typstyle",
 --    exportPdf = "onType",
 --    semanticTokens = "disable"
 --  }
---}
+--})
+--vim.lsp.enable({"tinymist"})
 
-require("lspconfig").rust_analyzer.setup({
+--require("lspconfig").rust_analyzer.setup({
+--  settings = {
+--    ["rust-analyzer"] = {
+--      inlayHints = {
+--        -- Optional: tweak what hints you want
+--        lifetimeElisionHints = { enable = true, useParameterNames = true },
+--        parameterHints = { enable = true },
+--        typeHints = { enable = true },
+--      },
+--    },
+--  },
+--})
+
+
+vim.lsp.config("rust_analyzer", {
   settings = {
     ["rust-analyzer"] = {
       inlayHints = {
@@ -201,6 +216,7 @@ require("lspconfig").rust_analyzer.setup({
     },
   },
 })
+vim.lsp.enable({"rust_analyzer"})
 
 --
 vim.keymap.set("n", "<leader>hi", function()
@@ -224,8 +240,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
    end
  end,
 })
-
-require("hardtime").setup()
 
 vim.notify = require("notify")
 

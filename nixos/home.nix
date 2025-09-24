@@ -5,10 +5,6 @@
   home.username = "maruli";
   home.homeDirectory = "/home/maruli";
 
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
-
   # link the configuration file in current directory to the specified location in home directory
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
 
@@ -120,6 +116,10 @@
     typescript-language-server
 
     phpactor
+
+    scrcpy
+
+    swaybg # wallpaper
   ];
 
 #  # basic configuration of git, please change to your own
@@ -134,13 +134,9 @@
     enable = true;
     # custom settings
     settings = {
-      add_newline = false;
-      aws.disabled = true;
-      gcloud.disabled = true;
-      line_break.disabled = true;
       cmd_duration = {
         show_notifications = true;
-        min_time_to_notify = 3000;
+        min_time_to_notify = 10000;
       };
     };
   };
@@ -170,7 +166,6 @@
     enable = true;
 #    enableZshIntegration = true;
     enableBashIntegration = true;
-#    extraConfig = builtins.readFile ./dotfiles/wezterm/wezterm.lua;
     extraConfig = builtins.readFile ../config/wezterm.lua;
   };
 
@@ -202,6 +197,8 @@
        prepend /home/maruli/.apps |
        append /usr/bin/env
        )
+
+       $env.EDITOR = "nvim"
        '';
     shellAliases = {
        vi = "nvim";
@@ -220,51 +217,16 @@
     enable = true;
     settings = {
       scroll_buffer_size = 1000000;
-      scrollback_editor = "/run/current-system/sw/bin/nvim";
+      scrollback_editor = "nvim";
       default_shell = "nu";
     };
   };
 
-#  programs.neovim.plugins = [
-#    pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-#  ];
   programs.neovim = {
     enable = true;
-#    package = pkgs.neovim-nightly;
     vimAlias = true;
     vimdiffAlias = true;
     withNodeJs = true;
-
-#    plugins = with pkgs.vimPlugins; [
-#      lazy-nvim
-#      which-key-nvim
-#    ];
-#
-#    extraLuaConfig = ''
-#      vim.g.mapleader = " " -- Need to set leader before lazy for correct keybindings
-#      require("lazy").setup({
-#        performance = {
-#          reset_packpath = false,
-#          rtp = {
-#              reset = false,
-#            }
-#          },
-#        dev = {
-#          path = "${pkgs.vimUtils.packDir config.programs.neovim.finalPackage.passthru.packpathDirs}/pack/myNeovimPackages/start",
-#	  patterns = {""}, -- Specify that all of our plugins will use the dev dir. Empty string is a wildcard!
-#        },
-#        install = {
-#          -- Safeguard in case we forget to install a plugin with Nix
-#          missing = false,
-#	  colorscheme = { "habamax" },
-#        },
-#        spec = {
-#          -- import your plugins
-#          { import = "plugins" },
-#        },
-#        checker = { enabled = true },
-#      })
-#    '';
   };
 
   xdg.configFile."nvim" = {
@@ -283,4 +245,14 @@
   home.stateVersion = "25.05";
 
   fonts.fontconfig.enable = true;
+
+  programs.alacritty.enable = true; # Super+T in the default setting (terminal)
+  programs.fuzzel.enable = true; # Super+D in the default setting (app launcher)
+  programs.swaylock.enable = true; # Super+Alt+L in the default setting (screen locker)
+  programs.waybar.enable = true; # launch on startup in the default setting (bar)
+  services.mako.enable = true; # notification daemon
+  services.swayidle.enable = true; # idle management daemon
+  services.polkit-gnome.enable = true; # polkit
+
+  xdg.configFile."niri/config.kdl".source = ./niri.kdl;
 }
